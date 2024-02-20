@@ -6,6 +6,41 @@
  */
 #include "snake.h"
 
+#ifdef MIXU_EMULATOR
+#include "SDL.h"
+#include "stdlib.h"
+
+#define SSD1306_HEIGHT 200
+#define SSD1306_WIDTH 150
+void ssd1306_DrawPixel(uint8_t x, uint8_t y, int blackwhite) {
+	// b=0, w=1
+}
+void ssd1306_Fill(int blackwhite) { }
+
+/* Write the screenbuffer with changed to the screen */
+void ssd1306_UpdateScreen() { }
+void ssd1306_SetCursor(int x, int y) {}
+void ssd1306_WriteString(const char* s, int font, int color) {}
+void ssd1306_WriteChar(char c, int font ,int color) {}
+#define Font_11x18 1
+#define SW1_Pin 0
+#define SW1_GPIO_Port SDL_KEYUP
+#define SW2_Pin 0
+#define SW2_GPIO_Port SDL_KEYUP
+#define SW3_Pin 0
+#define SW3_GPIO_Port SDL_KEYUP
+#define SW4_Pin 0
+#define SW4_GPIO_Port SDL_KEYUP
+#define Black 1
+bool HAL_GPIO_ReadPin(int pin, int unused) {
+	return true;
+}
+void HAL_Delay(int delay) {
+
+}
+
+#endif // MIXU_EMULATOR
+
 #define gruix 4 //entre 4 i 8
 #define ymax SSD1306_HEIGHT/gruix
 #define xmax SSD1306_WIDTH/gruix

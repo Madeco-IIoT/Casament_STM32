@@ -7,9 +7,14 @@
 
 #ifndef SNAKE_H_
 #define SNAKE_H_
+
+#ifndef MIXU_EMULATOR
 #include "main.h"
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
+#else
+#include "stdbool.h"
+#endif
 
 void init_snake(void);
 void draw_snake(int x,int y);

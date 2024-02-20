@@ -1,8 +1,13 @@
-cmake_minimum_required(VERSION 3.10)
+
 
 project(Casament_Emulator LANGUAGES C CXX)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME}
+    main.cpp
+    ../Source/snake.c
+)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE MIXU_EMULATOR=1)
 
 set(CMAKE_CXX_STANDARD 20)
 
