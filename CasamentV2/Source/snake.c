@@ -149,8 +149,8 @@ void re_init(void){
 }
 
 void spawn_food(void){
-	int xf=rand_no(xmax-1);
-	int yf=rand_no(ymax-1);
+	int xf=rand_no(xmax-2);
+	int yf=rand_no(ymax-2);
 	while(draw_grid[xf][yf]==2){
 		xf=rand_no(xmax-1);
 		yf=rand_no(ymax-1);

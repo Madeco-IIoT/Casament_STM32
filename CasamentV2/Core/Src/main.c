@@ -66,7 +66,7 @@ uint8_t var1 = 0;
 uint8_t actualzarhora = 0;
 //variables snake
 extern int score;
-bool snake_en = true; //engenga la pantalla de l'snake.
+bool snake_en = false; //engenga la pantalla de l'snake.
 bool simon_en = false;
 bool boad_en = false;
 
@@ -170,6 +170,8 @@ int main(void)
 		  //menu principal, posar la hora i el boto incial.
 		  hora();
 		  score = 0;
+		  menu();
+
 
 	  }
 	  if(snake_en){
@@ -182,14 +184,6 @@ int main(void)
 	  if(boad_en){
 		  boad_init(true);
 		  boad_matrix_build();
-		  //initMatrix(fragata, 9, 4, true);
-		  //initMatrix(fragata, 5, 2, true);
-		  //initMatrix(fragata, 7, 3, true);
-		  //initMatrix(destructor, 1, 1, true);
-		  //initMatrix(destructor, 9, 1, false);
-		  //initMatrix(acorasat, 3, 3, true);
-		  //updateMatrix(3, 3);
-		  //updateMatrix(1, 4);
 		  update_OLED();
 	  }
 	  //HAL_Delay(200);
