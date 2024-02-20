@@ -1,3 +1,15 @@
+#settings
+.settings/
+
+#metadata
+.metadata/
+
+#debug
+Debug/
+debug/
+Release/
+release/
+
 # Prerequisites
 *.d
 
