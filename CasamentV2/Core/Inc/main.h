@@ -42,6 +42,7 @@ extern "C" {
 #include "snake.h"
 #include "boat.h"
 #include "CAH.h"
+#include "simon.h"
 
 /* USER CODE END Includes */
 

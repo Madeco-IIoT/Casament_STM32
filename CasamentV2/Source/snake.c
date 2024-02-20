@@ -80,7 +80,9 @@ void clear_block(int x,int y){
 }
 
 void update_grid(){
+	//ssd1306_Init();
 	ssd1306_Fill(Black);
+	//ssd1306_UpdateScreen();
 	for(int i=0;i<xmax;i++){
 		for(int j=0;j<ymax;j++){
 			if(draw_grid[i][j]==2){

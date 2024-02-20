@@ -13,6 +13,7 @@ uint8_t boat_matrix[9][4];
 
 
 void boad_init(bool new_game){
+	ssd1306_Fill(Black);
 	//fer les ratlles horitxontals
 	for(uint8_t x=0; x<9; x++){
 		ssd1306_SetCursor(14+x*12,0);
@@ -29,7 +30,7 @@ void boad_init(bool new_game){
 			ssd1306_Line(pas_reixa*z, 13, pas_reixa*z, SSD1306_HEIGHT-5, White);
 	}
 	ssd1306_UpdateScreen();
-	ssd1306_UpdateScreen();
+	//ssd1306_UpdateScreen();
 	if (new_game) {
 		for(uint8_t x=0; x<9; x++){
 			for(uint8_t y=0; y<4; y++){

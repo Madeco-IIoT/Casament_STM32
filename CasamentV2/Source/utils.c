@@ -140,6 +140,8 @@ void menu (void){
 		if(HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)){ // accept
 			while (HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)) HAL_Delay(1);
 			snake_en = true;
+			boad_en = false;
+			simon_en = false;
 		}
 		break;
 	case 1:
@@ -158,9 +160,12 @@ void menu (void){
 			while (HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)) HAL_Delay(1);
 			menu_sel ++;
 		}
+
 		if(HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)){ // accept
 			while (HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)) HAL_Delay(1);
 			boad_en = true;
+			snake_en = false;
+			simon_en = false;
 		}
 		break;
 	case 2:
@@ -174,6 +179,12 @@ void menu (void){
 		if(HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)){ // up
 			while (HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)) HAL_Delay(1);
 			menu_sel --;
+		}
+		if(HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)){ // accept
+			while (HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)) HAL_Delay(1);
+			simon_en = true;
+			boad_en = false;
+			snake_en = false;
 		}
 
 		break;

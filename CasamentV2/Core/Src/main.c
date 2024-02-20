@@ -32,14 +32,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 //colors
-#define groc 	0xF0FF00
-#define rosa 	0xEB636B
-#define blanc	0x010101
-#define negre	0x000000
-#define vermell	0xFF0000
-#define blau	0x00FF00
-#define verd	0x0000FF
-#define llanter 0xFFFFFF
+
 
 /* USER CODE END PD */
 
@@ -168,11 +161,10 @@ int main(void)
 	  //joc del snake
 	  if(!snake_en && !simon_en && !boad_en){
 		  //menu principal, posar la hora i el boto incial.
+		  //LED_RGB(vermell);
 		  hora();
-		  score = 0;
+		  //score = 0;
 		  menu();
-
-
 	  }
 	  if(snake_en){
 		  update_grid();
@@ -185,6 +177,9 @@ int main(void)
 		  boad_init(true);
 		  boad_matrix_build();
 		  update_OLED();
+	  }
+	  if(simon_en){
+		  test_led();
 	  }
 	  //HAL_Delay(200);
 
