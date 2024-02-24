@@ -181,8 +181,8 @@ void check_collision(bool re_new_game){
 }
 
 void wait_check(void){
-	for(int i=0;i<20;i++){
-		sw_down=HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin);
+	for(int i=0;i<10;i++){
+		sw_down=HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin);
 
 		if(sw_down==true && snake_speed[1]==0){
 			snake_speed[0]=0;
@@ -201,7 +201,7 @@ void wait_check(void){
 			snake_speed[1]=0;
 			break;
 		}
-		sw_left=HAL_GPIO_ReadPin(SW3_GPIO_Port,SW3_Pin);
+		sw_left=HAL_GPIO_ReadPin(SW2_GPIO_Port,SW2_Pin);
 		if(sw_left==true && snake_speed[0]==0){
 			snake_speed[0]=-1;
 			snake_speed[1]=0;

@@ -132,9 +132,11 @@ void menu (void){
 		ssd1306_WriteString(" Sink the float ", Font_7x10, White);
 		ssd1306_SetCursor(4,36);
 		ssd1306_WriteString(" Simon ", Font_7x10, White);
+		ssd1306_SetCursor(4,48);
+		ssd1306_WriteString(" Llanterna ", Font_7x10, White);
 		ssd1306_UpdateScreen();
-		if(HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)){ // down
-			while (HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)) HAL_Delay(1);
+		if(HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)){ // down
+			while (HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)) HAL_Delay(1);
 			menu_sel ++;
 		}
 		if(HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)){ // accept
@@ -151,13 +153,15 @@ void menu (void){
 		ssd1306_WriteString(" Sink the float ", Font_7x10, Black);
 		ssd1306_SetCursor(4,36);
 		ssd1306_WriteString(" Simon ", Font_7x10, White);
+		ssd1306_SetCursor(4,48);
+		ssd1306_WriteString(" Llanterna ", Font_7x10, White);
 		ssd1306_UpdateScreen();
 		if(HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)){ // Up
 			while (HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)) HAL_Delay(1);
 			menu_sel --;
 		}
-		if(HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)){ // down
-			while (HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)) HAL_Delay(1);
+		if(HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)){ // down
+			while (HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)) HAL_Delay(1);
 			menu_sel ++;
 		}
 
@@ -175,6 +179,34 @@ void menu (void){
 		ssd1306_WriteString(" Sink the float ", Font_7x10, White);
 		ssd1306_SetCursor(4,36);
 		ssd1306_WriteString(" Simon ", Font_7x10, Black);
+		ssd1306_SetCursor(4,48);
+		ssd1306_WriteString(" Llanterna ", Font_7x10, White);
+		ssd1306_UpdateScreen();
+		if(HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)){ // Up
+			while (HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)) HAL_Delay(1);
+			menu_sel --;
+		}
+		if(HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)){ // down
+			while (HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)) HAL_Delay(1);
+			menu_sel ++;
+		}
+
+		if(HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)){ // accept
+			while (HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)) HAL_Delay(1);
+			boad_en = false;
+			snake_en = false;
+			simon_en = true;
+		}
+		break;
+	case 3:
+		ssd1306_SetCursor(4,12);
+		ssd1306_WriteString(" Snake ", Font_7x10, White);
+		ssd1306_SetCursor(4,24);
+		ssd1306_WriteString(" Sink the float ", Font_7x10, White);
+		ssd1306_SetCursor(4,36);
+		ssd1306_WriteString(" Simon ", Font_7x10, White);
+		ssd1306_SetCursor(4,48);
+		ssd1306_WriteString(" Llanterna ", Font_7x10, Black);
 		ssd1306_UpdateScreen();
 		if(HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)){ // up
 			while (HAL_GPIO_ReadPin(SW1_GPIO_Port, SW1_Pin)) HAL_Delay(1);
@@ -182,12 +214,30 @@ void menu (void){
 		}
 		if(HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)){ // accept
 			while (HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)) HAL_Delay(1);
-			simon_en = true;
+			simon_en = false;
 			boad_en = false;
 			snake_en = false;
+			menu_sel = 200;
 		}
 
 		break;
+	case 200:
+		bool sortir = false;
+		LED_RGB(llanter);
+		ssd1306_Fill(White);
+		ssd1306_UpdateScreen();
+		while(!sortir){
+			while(HAL_GPIO_ReadPin(SW5_GPIO_Port, SW5_Pin)){
+				menu_sel = 0;
+				ssd1306_Fill(Black);
+				LED_RGB(negre);
+				sortir = true;
+			}
+			HAL_Delay(1);
+		}
+		break;
+
+
 	default:
 		HAL_Delay(1);
 	}

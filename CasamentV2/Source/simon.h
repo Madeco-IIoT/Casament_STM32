@@ -12,7 +12,7 @@
 #include "stdbool.h"
 #include "ssd1306.h"
 
-#define groc 	0x101100
+#define lila 	0x201100
 #define rosa 	0x753135
 #define blanc	0x050505
 #define negre	0x000000
@@ -23,6 +23,9 @@
 
 
 void test_led(void);
+void Sel_color(uint8_t color);
+uint8_t random_num(uint8_t max, uint8_t min);
+void test_random_LED(void);
 
 
 #endif /* SIMON_H_ */

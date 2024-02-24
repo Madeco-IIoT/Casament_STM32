@@ -241,19 +241,19 @@ void boad_matrix_build (void){
 				initMatrix(boat_type, x_boat, y_boat, horitzontal, false);
 			}
 		}
-		else if(HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)){ // up
+		else if(HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)){ // up
 			initMatrix(boat_type, x_boat, y_boat, horitzontal, true);
 			y_boat = clamp(y_boat + 1, min_y, max_y);
-			while (HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)) HAL_Delay(1);
+			while (HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)) HAL_Delay(1);
 			if(initMatrix(boat_type, x_boat, y_boat, horitzontal, false)){
 				y_boat = clamp(y_boat - 1, min_y, max_y);
 				initMatrix(boat_type, x_boat, y_boat, horitzontal, false);
 			}
 		}
-		else if(HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)){ // left
+		else if(HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)){ // left
 			initMatrix(boat_type, x_boat, y_boat, horitzontal, true);
 			x_boat = clamp(x_boat - 1, min_x, max_x);
-			while (HAL_GPIO_ReadPin(SW3_GPIO_Port, SW3_Pin)) HAL_Delay(1);
+			while (HAL_GPIO_ReadPin(SW2_GPIO_Port, SW2_Pin)) HAL_Delay(1);
 			if(initMatrix(boat_type, x_boat, y_boat, horitzontal, false)){
 				x_boat = clamp(x_boat + 1, min_x, max_x);
 				initMatrix(boat_type, x_boat, y_boat, horitzontal, false);

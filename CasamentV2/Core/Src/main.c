@@ -179,7 +179,8 @@ int main(void)
 		  update_OLED();
 	  }
 	  if(simon_en){
-		  test_led();
+		  //test_led();
+		  test_random_LED();
 	  }
 	  //HAL_Delay(200);
 
@@ -563,14 +564,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SW2_Pin SW4_Pin SW5_Pin */
-  GPIO_InitStruct.Pin = SW2_Pin|SW4_Pin|SW5_Pin;
+  /*Configure GPIO pins : SW3_Pin SW4_Pin SW5_Pin */
+  GPIO_InitStruct.Pin = SW3_Pin|SW4_Pin|SW5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SW3_Pin SW1_Pin */
-  GPIO_InitStruct.Pin = SW3_Pin|SW1_Pin;
+  /*Configure GPIO pins : SW2_Pin SW1_Pin */
+  GPIO_InitStruct.Pin = SW2_Pin|SW1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
