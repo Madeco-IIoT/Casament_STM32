@@ -5,21 +5,27 @@
  *      Author: sobra
  */
 #define pas_reixa 12
+#define columnes 9
+#define files 4
+#define array_data 12
 
 
 #include "boat.h"
 
-uint8_t boat_matrix[9][4];
+extern UART_HandleTypeDef huart6;
+
+uint8_t boat_matrix[columnes][files];
+
 
 
 void boad_init(bool new_game){
 	ssd1306_Fill(Black);
 	//fer les ratlles horitxontals
-	for(uint8_t x=0; x<9; x++){
+	for(uint8_t x=0; x<columnes; x++){
 		ssd1306_SetCursor(14+x*12,0);
 		ssd1306_WriteChar(x+65, Font_7x10, White);
 	}
-	for(uint8_t x=0; x<4; x++){
+	for(uint8_t x=0; x<files; x++){
 		ssd1306_SetCursor(0,14+x*12);
 		ssd1306_WriteChar(x+49, Font_7x10, White);
 	}
@@ -32,8 +38,8 @@ void boad_init(bool new_game){
 	ssd1306_UpdateScreen();
 	//ssd1306_UpdateScreen();
 	if (new_game) {
-		for(uint8_t x=0; x<9; x++){
-			for(uint8_t y=0; y<4; y++){
+		for(uint8_t x=0; x<columnes; x++){
+			for(uint8_t y=0; y<files; y++){
 				boat_matrix[x][y] = 0;
 			}
 		}
@@ -45,8 +51,8 @@ bool initMatrix(uint8_t boat_type, uint8_t x_boat, uint8_t y_boat, bool horitzot
 	if (boat_type == fragata){
 		//no cal mirar si és horitzontal o vertical
 		//cal verificar que no sigui un nuemro massa gros
-		if(x_boat > 9) x_boat = 9;
-		if(y_boat > 4) y_boat = 4;
+		if(x_boat > columnes) x_boat = columnes;
+		if(y_boat > files) y_boat = files;
 		if(!boat_erase){
 			if (boat_matrix[x_boat-1][y_boat-1] == 0){
 				boat_matrix[x_boat-1][y_boat-1]=boat_type;
@@ -63,8 +69,8 @@ bool initMatrix(uint8_t boat_type, uint8_t x_boat, uint8_t y_boat, bool horitzot
 	if (boat_type == destructor){
 		if(horitzotnal){
 			//cal verificar que no sigui un nuemro massa gros
-			if(x_boat > 8) x_boat = 8;
-			if(y_boat > 4) y_boat = 4;
+			if(x_boat > (columnes-1)) x_boat = (columnes-1);
+			if(y_boat > files) y_boat = files;
 			if(!boat_erase){
 				if (boat_matrix[x_boat-1][y_boat-1] == 0 || boat_matrix[x_boat][y_boat-1] == boat_type){
 					if (boat_matrix[x_boat][y_boat-1] == 0){
@@ -82,8 +88,8 @@ bool initMatrix(uint8_t boat_type, uint8_t x_boat, uint8_t y_boat, bool horitzot
 		}
 		else{
 			//cal verificar que no sigui un nuemro massa gros
-			if(x_boat > 9) x_boat = 9;
-			if(y_boat > 3) y_boat = 3;
+			if(x_boat > columnes) x_boat = columnes;
+			if(y_boat > (files-1)) y_boat = (files-1);
 			if(!boat_erase){
 				if (boat_matrix[x_boat-1][y_boat-1] == 0 ){
 					if (boat_matrix[x_boat-1][y_boat] == 0 || boat_matrix[x_boat-1][y_boat] == boat_type){
@@ -103,8 +109,8 @@ bool initMatrix(uint8_t boat_type, uint8_t x_boat, uint8_t y_boat, bool horitzot
 	if (boat_type == acorasat){
 		if(horitzotnal){
 			//cal verificar que no sigui un nuemro massa gros
-			if(x_boat > 7) x_boat = 7;
-			if(y_boat > 4) y_boat = 4;
+			if(x_boat > (columnes-2)) x_boat = (columnes-2);
+			if(y_boat > files) y_boat = files;
 			if(!boat_erase){
 				if (boat_matrix[x_boat-1][y_boat-1] == 0 || boat_matrix[x_boat][y_boat-1] == boat_type){
 					if ( boat_matrix[x_boat+1][y_boat-1] == 0 || boat_matrix[x_boat+1][y_boat-1] == boat_type){
@@ -128,8 +134,8 @@ bool initMatrix(uint8_t boat_type, uint8_t x_boat, uint8_t y_boat, bool horitzot
 		}
 		else{
 			//cal verificar que no sigui un nuemro massa gros
-			if(x_boat > 9) x_boat = 9;
-			if(y_boat > 2) y_boat = 2;
+			if(x_boat > columnes) x_boat = columnes;
+			if(y_boat > (files-2)) y_boat = (files-2);
 			if(!boat_erase){
 				if (boat_matrix[x_boat-1][y_boat-1] == 0 ){
 					if (boat_matrix[x_boat-1][y_boat] == 0 || boat_matrix[x_boat-1][y_boat] == boat_type){
@@ -286,6 +292,7 @@ void boad_matrix_build (void){
 				initMatrix(boat_type, x_boat, y_boat, horitzontal, false);
 			}
 			else {
+				//guardar barco
 				boat_num ++;
 				if (boat_num < 3) boat_type = fragata;
 				else if (boat_num > 2 && boat_num < 5 ) boat_type = destructor;
@@ -293,15 +300,54 @@ void boad_matrix_build (void){
 
 				x_boat = 1;
 				y_boat = 1;
-				while (initMatrix(boat_type, x_boat, y_boat, horitzontal, false)){
-					x_boat ++;
-					if(x_boat > max_x){
-						x_boat = 0;
-						y_boat ++;
+				if(boat_num < 6){
+					while (initMatrix(boat_type, x_boat, y_boat, horitzontal, false)){
+						x_boat ++;
+						if(x_boat > max_x){
+							x_boat = 0;
+							y_boat ++;
+						}
 					}
 				}
 			}
 		}
 	}
+}
+
+uint32_t Boat_Send_matrix(uint8_t source_pcb, uint8_t destination_pcb){
+	//s'ha de enviar el array amb tota la informació.
+	uint8_t boat_data[array_data] = {};
+	uint8_t byte_array = 1;
+	uint8_t maskaigua = 0x01;
+	uint8_t masktocat = 0x03;
+	boat_data[0] = 135;
+
+	for(uint8_t x=0; x<columnes; x++){
+		for(uint8_t y=0; y<files; y++){
+			//cal detectar els atacs realitzats.
+			//100 es que han atacat i ha tocat a l'aigua
+			//101 els que han atacat i han tocat un barco.
+
+			if(boat_matrix[x][y] == 2 )	boat_data[byte_array] = boat_data[byte_array] | maskaigua;
+			if(boat_matrix[x][y] == 3 )	boat_data[byte_array] = boat_data[byte_array] | masktocat;
+
+			//hauria de coinicidi el reset de la mascarà amb el final del for.
+			if (maskaigua == 0x40) {
+				maskaigua = 0x01;
+				masktocat = 0x03;
+				byte_array++;
+			} else {
+				maskaigua <<= 2;
+				masktocat <<= 2;
+			}
+		}
+	}
+	boat_data[byte_array] = source_pcb;
+	byte_array++;
+	boat_data[byte_array] = destination_pcb;
+
+	HAL_UART_Transmit(&huart6, boat_data, (uint16_t)array_data, 100);
+
+	return 0x44;
 }
 

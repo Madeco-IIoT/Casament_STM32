@@ -196,6 +196,7 @@ void menu (void){
 			boad_en = false;
 			snake_en = false;
 			simon_en = true;
+			init_simon();
 		}
 		break;
 	case 3:

@@ -22,6 +22,7 @@ bool initMatrix(uint8_t boat_type, uint8_t x_boat, uint8_t y_boat, bool horitzot
 bool updateMatrix(uint8_t x_boom, uint8_t y_boom);
 bool update_OLED(void);
 void boad_matrix_build (void);
+uint32_t Boat_Send_matrix(uint8_t source_pcb, uint8_t destination_pcb);
 
 
 

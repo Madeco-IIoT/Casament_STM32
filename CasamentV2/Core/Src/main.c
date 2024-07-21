@@ -42,9 +42,14 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
 
 RTC_HandleTypeDef hrtc;
+
+SPI_HandleTypeDef hspi5;
 
 TIM_HandleTypeDef htim5;
 TIM_HandleTypeDef htim11;
@@ -55,13 +60,24 @@ UART_HandleTypeDef huart6;
 
 /* USER CODE BEGIN PV */
 uint8_t var1 = 0;
+//UART1=J3
+//UART6=J2
+//UART2=ICSP
+int __io_putchar(int ch){
+	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 100);
+	return ch;
+}
 
 uint8_t actualzarhora = 0;
 //variables snake
 extern int score;
+//veriables del menu
 bool snake_en = false; //engenga la pantalla de l'snake.
 bool simon_en = false;
 bool boad_en = false;
+//veriable del simon
+uint8_t control_error = 0;
+
 
 
 
@@ -77,6 +93,9 @@ static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_RTC_Init(void);
+static void MX_ADC1_Init(void);
+static void MX_I2C2_Init(void);
+static void MX_SPI5_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -121,6 +140,9 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART6_UART_Init();
   MX_RTC_Init();
+  MX_ADC1_Init();
+  MX_I2C2_Init();
+  MX_SPI5_Init();
   /* USER CODE BEGIN 2 */
   init_RGB();
   ssd1306_Init();
@@ -132,6 +154,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  printf("A&E Bodorrio Hw 1.2 \r\n");
   while (1)
   {
     /* USER CODE END WHILE */
@@ -163,6 +186,8 @@ int main(void)
 		  //menu principal, posar la hora i el boto incial.
 		  //LED_RGB(vermell);
 		  hora();
+		  //printf("hola\r\n");
+
 		  //score = 0;
 		  menu();
 	  }
@@ -176,11 +201,18 @@ int main(void)
 	  if(boad_en){
 		  boad_init(true);
 		  boad_matrix_build();
+		  Boat_Send_matrix(0x34, 0x88);
 		  update_OLED();
 	  }
 	  if(simon_en){
 		  //test_led();
-		  test_random_LED();
+		  //test_random_LED();
+		  Led_Sequence();
+		  control_error = SW_Sequence ();
+		  if(control_error == 100){
+			  init_simon();
+		  }
+		  HAL_Delay(200);
 	  }
 	  //HAL_Delay(200);
 
@@ -232,6 +264,58 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
   * @brief I2C1 Initialization Function
   * @param None
   * @retval None
@@ -262,6 +346,40 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief I2C2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C2_Init(void)
+{
+
+  /* USER CODE BEGIN I2C2_Init 0 */
+
+  /* USER CODE END I2C2_Init 0 */
+
+  /* USER CODE BEGIN I2C2_Init 1 */
+
+  /* USER CODE END I2C2_Init 1 */
+  hi2c2.Instance = I2C2;
+  hi2c2.Init.ClockSpeed = 100000;
+  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c2.Init.OwnAddress1 = 0;
+  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c2.Init.OwnAddress2 = 0;
+  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C2_Init 2 */
+
+  /* USER CODE END I2C2_Init 2 */
 
 }
 
@@ -329,6 +447,44 @@ static void MX_RTC_Init(void)
   /* USER CODE BEGIN RTC_Init 2 */
   }
   /* USER CODE END RTC_Init 2 */
+
+}
+
+/**
+  * @brief SPI5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI5_Init(void)
+{
+
+  /* USER CODE BEGIN SPI5_Init 0 */
+
+  /* USER CODE END SPI5_Init 0 */
+
+  /* USER CODE BEGIN SPI5_Init 1 */
+
+  /* USER CODE END SPI5_Init 1 */
+  /* SPI5 parameter configuration*/
+  hspi5.Instance = SPI5;
+  hspi5.Init.Mode = SPI_MODE_MASTER;
+  hspi5.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi5.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi5.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi5.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi5.Init.NSS = SPI_NSS_SOFT;
+  hspi5.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi5.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi5.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi5.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi5.Init.CRCPolynomial = 15;
+  if (HAL_SPI_Init(&hspi5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI5_Init 2 */
+
+  /* USER CODE END SPI5_Init 2 */
 
 }
 
@@ -555,14 +711,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PB10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : SW3_Pin SW4_Pin SW5_Pin */
   GPIO_InitStruct.Pin = SW3_Pin|SW4_Pin|SW5_Pin;

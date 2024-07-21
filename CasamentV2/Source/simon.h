@@ -21,11 +21,15 @@
 #define verd	0x00000F
 #define llanter 0xFFFFFF
 
-
+void init_simon(void);
 void test_led(void);
 void Sel_color(uint8_t color);
 uint8_t random_num(uint8_t max, uint8_t min);
-void test_random_LED(void);
+uint8_t test_random_LED(void);
+void Led_Sequence(void);
+uint8_t SW_Sequence (void);
+uint8_t SW_Control (uint8_t TimeOut_ms);
+void simon_screen(uint8_t score);
 
 
 #endif /* SIMON_H_ */

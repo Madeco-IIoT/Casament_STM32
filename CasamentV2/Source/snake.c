@@ -96,6 +96,10 @@ void update_grid(){
 			}
 		}
 	}
+	ssd1306_Line(0, 0, SSD1306_WIDTH, 0, White);
+	ssd1306_Line(0, 0, 0, SSD1306_HEIGHT, White);
+	ssd1306_Line(0, SSD1306_HEIGHT-1, SSD1306_WIDTH, SSD1306_HEIGHT-1, White);
+	ssd1306_Line(SSD1306_WIDTH-1, 0, SSD1306_WIDTH-1, SSD1306_HEIGHT, White);
 	ssd1306_UpdateScreen();
 }
 
